@@ -7,7 +7,7 @@ import openai
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 st.set_page_config(
-    page_title="Youtube Summary",
+    page_title="Youtube Summary in 3 Sentences",
     page_icon="😀",
     layout="wide"
 )
@@ -20,7 +20,7 @@ st.sidebar.write("4. Done!")
 st.sidebar.write("")
 st.sidebar.page_link("https://www.youtube.com/", label="Find more videos!", icon="▶")
 
-st.title("Youtube Summary")
+st.title("Youtube Summary in 3 Sentences")
 st.write("")
 url = st.text_input("Youtube URL")
 
