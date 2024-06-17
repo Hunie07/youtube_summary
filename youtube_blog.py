@@ -7,20 +7,20 @@ import openai
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 st.set_page_config(
-    page_title="Youtube to Blog",
+    page_title="Youtube Summary",
     page_icon="😀",
     layout="wide"
 )
 
 st.sidebar.header("How to Use?")
-st.sidebar.write("1. Please input your youtube url which contains 'v='.")
-st.sidebar.write("2. Then, click the 'confirm' button.")
+st.sidebar.write("1. Please input your youtube url.")
+st.sidebar.write("2. Then, click the 'Confirm' button.")
 st.sidebar.write("3. Wait for seconds.")
 st.sidebar.write("4. Done!")
 st.sidebar.write("")
 st.sidebar.page_link("https://www.youtube.com/", label="Find more videos!", icon="▶")
 
-st.title("Youtube to Blog")
+st.title("Youtube Summary")
 st.write("")
 url = st.text_input("Youtube URL")
 
@@ -44,29 +44,19 @@ if button:
                 try:
                     result = YouTubeTranscriptApi.get_transcript(video_id, languages=["ko"])
 
-                    for i in result:
-                        context = context + " " + i["text"]
-                    #st.write(context)
+                    for text in result:
+                        context = context + " " + text["text"]
+                        
                     template_text = """
-                            너는 지금부터 한국의 20대 여성블로거다. 모든 대답을 한국의 20대 여성이 블로그에 적는 것처럼 해야 한다. 너는 20대 여성이 주로 사용하는 신조어를 사용해야한다. 예시를 참조하고 필수 표현을 참고해주세요.
+                            반드시 입력문에 있는 내용을 3줄로 요약해주세요. 아래 출력예시와 비슷하게 3개의 bullet point로 문장을 정리하면 됩니다.
 
-                            #제약조건
-                            - 최대한 길고 장황하게 작성하세요.
-
-                            #필수표현
-                            1. ㅋㅋㅋㅋㅋㅋㅋㅋ
-                            2. ㄹㅇ
-                            3. ㅠㅠ
-                            4. 아니ㅋㅋ
-                            5. 대박 ㅋㅋㅋ
-                            다른 표현을 이끌어내도 좋습니다.
-
-                            #예시
-                            남친이랑 데이트ㅋㅋㅋㅋㅋ 새로생긴 양식집인디 음료 서비스로 준대서 호다닥달려감~~ 저기 피자 ㄹㅇ 왕맛잇음 양식집말고 피자집 하시지 라는 생각99번함ㅋㅋㅋ 글고 쇼핑몰가서 나름 단정한 격식있는 있어보이는옷 산건데... 좀 별론가? 남친도 잘 모르겠다는듯ㅠㅠ
+                            # 예시
+                            ·금요일 미세먼지 '매우 나쁨'예상: 내몽골 발원 황사, 북서풍으로 유입
+                            ·황사위기경보 발령: 수도권, 강원, 충남, 경북에 관심 요청, 외출 자제 권고
+                            ·대기질 악화 예상: 30일까지 전국적으로 미세 먼지 '나쁨' 수준 지속 예상
 
                             # 입력문
                             -{prompt}
-
                             """
 
                     template1 = PromptTemplate.from_template(template_text)
